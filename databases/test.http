@@ -1,0 +1,12 @@
+GET http://localhost:8080/example11
+###
+
+GET http://localhost:8080/example2
+###
+
+GET http://localhost:8080/example3
+###
+
+GET http://localhost:8080/example7
+###
+
