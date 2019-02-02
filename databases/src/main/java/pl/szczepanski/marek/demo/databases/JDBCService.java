@@ -18,7 +18,8 @@ public class JDBCService {
         try {
             System.out.println("\n\n==========");
             // 1. Get a connection to database
-            myConn = DriverManager.getConnection("jdbc:h2:mem:testdb", "sa", "");
+            myConn = DriverManager
+                    .getConnection("jdbc:h2:mem:testdb", "sa", "");
             System.out.println("Database connection successful!\n");
 
             // 2. Create a statement
@@ -29,7 +30,8 @@ public class JDBCService {
 
             // 4. Process the result set
             while (myRs.next()) {
-                String emploee = myRs.getString("last_name") + ", " + myRs.getString("first_name");
+                String emploee = myRs.getString("last_name")
+                        + ", " + myRs.getString("first_name");
                 System.out.println(emploee);
             }
 
@@ -58,7 +60,9 @@ public class JDBCService {
         String pass = "";
 
             // 1. Get a connection to database
-        try (Connection myConn = DriverManager.getConnection(dbUrl, user, pass)) {
+        try (
+                Connection myConn = DriverManager.getConnection(dbUrl, user, pass)
+        ) {
 
             // 2. Create a statement
             Statement myStmt = myConn.createStatement();
@@ -68,8 +72,12 @@ public class JDBCService {
 
             // 4. Process the result set
             while (myRs.next()) {
-                System.out.println(myRs.getString("last_name") + ", " + myRs.getString("first_name"));
+                System.out.println(myRs.getString("last_name")
+                        + ", " + myRs.getString("first_name"));
             }
+            ResultSet myRs1 = myStmt
+                    .executeQuery("select * from employees " +
+                            "where LOWER(departament) = 'legal'");
             return "OK";
         }
     }
@@ -91,10 +99,10 @@ public class JDBCService {
             System.out.println("Inserting a new employee to database\n");
 
             int rowsAffected = myStmt.executeUpdate(
-                    "insert into employees " +
-                            "(last_name, first_name, email, department, salary) " +
-                            "values " +
-                            "('Wright', 'Eric', 'eric.wright@foo.com', 'HR', 33000.00)");
+            "insert into employees " +
+                "(last_name, first_name, email, department, salary) " +
+                "values " +
+                "('Wright', 'Eric', 'eric.wright@foo.com', 'HR', 33000.00)");
 
             System.out.println(rowsAffected + "rows affected.\n");
 
@@ -120,7 +128,7 @@ public class JDBCService {
             int rowsAffected = myStmt.executeUpdate(
                     "update employees " +
                             "set email='john.doe@luv2code.com' " +
-                            "where last_name='Doe' and first_name='John'");
+                            "where department = 'HR'");
 
             System.out.println(rowsAffected + "rows affected.\n");
 
@@ -167,11 +175,14 @@ public class JDBCService {
 
             // QUERY FOR SALARY > 80000
             String departament = "HR";
-            ResultSet myRs1 = myStmt1.executeQuery("select * from employees where department = '" + departament + "'");
+            ResultSet myRs1 = myStmt1
+                    .executeQuery(
+                    "select * from employees where department = '" + departament + "'");
             // SQL injection PROBLEM!!!
 
             // Prepare statement
-            PreparedStatement myStmt = myConn.prepareStatement("select * from employees where salary > ? and department = ?");
+            PreparedStatement myStmt = myConn.prepareStatement(
+                "select * from employees where salary > ? and department = ?");
 
             // Set the parameters
             myStmt.setDouble(1, 80000);
@@ -229,7 +240,8 @@ public class JDBCService {
 
             // Transaction Step 2: Set salaries to 300000 for all Engineering
             // employees
-            myStmt.executeUpdate("update employees set salary=300000 where department='Engineering'");
+            myStmt.executeUpdate(
+            "update employees set salary=300000 where department='Engineering'");
 
             System.out.println("\n>> Transaction steps are ready.\n");
 
