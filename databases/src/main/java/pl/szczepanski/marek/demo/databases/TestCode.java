@@ -1,8 +1,11 @@
 package pl.szczepanski.marek.demo.databases;
 
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.CriteriaSpecification;
+import org.hibernate.criterion.Restrictions;
 import org.hibernate.query.Query;
 import org.springframework.stereotype.Component;
 import pl.szczepanski.marek.demo.databases.entities.Course;
@@ -51,7 +54,7 @@ public class TestCode {
 
             Course c3 = session.find(Course.class, 1);
             System.out.printf("\nfound " + c3.name);
-            c3.name = "course 1 updated ";
+            c3.name = "course 1 updated";
 
             tx.commit();
 
@@ -79,13 +82,35 @@ public class TestCode {
 
             tx.commit();
 
+            tx = session.beginTransaction();
+
+            Criteria criteria = session.createCriteria(Course.class);
+            criteria.add(Restrictions.eq("name", "course 1 updated"));
+            criteria.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
+            Course c6 = (Course) criteria.list().get(0);
+
+            System.out.printf("\ncourse selected by criteria: " + c6.name);
+
+            tx.commit();
+
+            tx = session.beginTransaction();
+
+            Student s1 = new Student();
+            s1.name = "student 1";
+            s1.address = "Poznan";
+            s1.courses = new HashSet<>();
+            s1.courses.add(c6);
+            s1.courses.add(c4);
+            session.persist(s1);
+
+            tx.commit();
+
         } catch (Exception ex) {
             if (tx != null && !tx.getRollbackOnly()) {
                 tx.rollback();
             }
             throw ex;
         }
-
 
 
         System.out.printf("\n---------------------\nTest code completed\n\n");
