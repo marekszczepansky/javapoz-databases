@@ -3,10 +3,15 @@ package pl.szczepanski.marek.demo.databases;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 import org.springframework.stereotype.Component;
+import pl.szczepanski.marek.demo.databases.entities.Course;
+import pl.szczepanski.marek.demo.databases.entities.Student;
 
 import javax.annotation.PostConstruct;
 import javax.persistence.EntityManagerFactory;
+import java.time.LocalDate;
+import java.util.HashSet;
 
 @Component
 public class TestCode {
@@ -28,16 +33,52 @@ public class TestCode {
         try (Session session = hibernateFactory.openSession()) {
             tx = session.beginTransaction();
 
-//            Course c = new Course();
-//
-//            c.name = "code 1";
-//            session.persist(c);
-//
-//            c = new Course();
-//            c.name = "code 2";
-//            session.persist(c);
+            Course c1 = new Course();
+
+            c1.name = "course 1";
+            c1.startDate = LocalDate.of(2019, 2, 26);
+            session.persist(c1);
+
+            Course c2 = new Course();
+            c2.name = "course 2";
+            c2.startDate = LocalDate.of(2019, 2, 20);
+            session.persist(c2);
+            session.evict(c2);
 
             tx.commit();
+
+            tx = session.beginTransaction();
+
+            Course c3 = session.find(Course.class, 1);
+            System.out.printf("\nfound " + c3.name);
+            c3.name = "course 1 updated ";
+
+            tx.commit();
+
+            tx = session.beginTransaction();
+
+            Course c4 = new Course();
+            c4.name = "nowy stan obiektu po update";
+            c4.startDate = LocalDate.of(2019, 2, 28);
+            c4.id = 2;
+
+            session.update(c4);
+
+            tx.commit();
+
+            tx = session.beginTransaction();
+
+            Query<Course> courseQuery = session.createQuery(
+                    "from Course where name like :nameparam",
+                    Course.class);
+            courseQuery.setParameter("nameparam", "course%");
+
+            Course c5 = courseQuery.list().get(0);
+
+            System.out.printf("\ncourse selected by query: " + c5.name);
+
+            tx.commit();
+
         } catch (Exception ex) {
             if (tx != null && !tx.getRollbackOnly()) {
                 tx.rollback();
