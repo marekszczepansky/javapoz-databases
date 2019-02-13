@@ -38,13 +38,13 @@ public class TestCode {
 
             Course c1 = new Course();
 
-            c1.name = "course 1";
-            c1.startDate = LocalDate.of(2019, 2, 26);
+            c1.setName("course 1");
+            c1.setStartDate(LocalDate.of(2019, 2, 26));
             session.persist(c1);
 
             Course c2 = new Course();
-            c2.name = "course 2";
-            c2.startDate = LocalDate.of(2019, 2, 20);
+            c2.setName("course 2");
+            c2.setStartDate(LocalDate.of(2019, 2, 20));
             session.persist(c2);
             session.evict(c2);
 
@@ -53,17 +53,17 @@ public class TestCode {
             tx = session.beginTransaction();
 
             Course c3 = session.find(Course.class, 1);
-            System.out.printf("\nfound " + c3.name);
-            c3.name = "course 1 updated";
+            System.out.println("\nfound " + c3.getName());
+            c3.setName("course 1 updated");
 
             tx.commit();
 
             tx = session.beginTransaction();
 
             Course c4 = new Course();
-            c4.name = "nowy stan obiektu po update";
-            c4.startDate = LocalDate.of(2019, 2, 28);
-            c4.id = 2;
+            c4.setName("nowy stan obiektu po update");
+            c4.setStartDate(LocalDate.of(2019, 2, 28));
+            c4.setId(2);
 
             session.update(c4);
 
@@ -78,7 +78,7 @@ public class TestCode {
 
             Course c5 = courseQuery.list().get(0);
 
-            System.out.printf("\ncourse selected by query: " + c5.name);
+            System.out.printf("\ncourse selected by query: " + c5.getName());
 
             tx.commit();
 
@@ -89,18 +89,18 @@ public class TestCode {
             criteria.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
             Course c6 = (Course) criteria.list().get(0);
 
-            System.out.printf("\ncourse selected by criteria: " + c6.name);
+            System.out.printf("\ncourse selected by criteria: " + c6.getName());
 
             tx.commit();
 
             tx = session.beginTransaction();
 
             Student s1 = new Student();
-            s1.name = "student 1";
-            s1.address = "Poznan";
-            s1.courses = new HashSet<>();
-            s1.courses.add(c6);
-            s1.courses.add(c4);
+            s1.setName("student 1");
+            s1.setAddress("Poznan");
+            s1.setCourses(new HashSet<>());
+            s1.getCourses().add(c6);
+            s1.getCourses().add(c4);
             session.persist(s1);
 
             tx.commit();

@@ -8,15 +8,50 @@ public class Student {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public int id;
+    private int id;
 
-    public String name;
+    private String name;
 
-    public String address;
+    private String address;
 
     @ManyToMany
-    public Set<Course> courses;
+    private Set<Course> courses;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public Set<Course> getCourses() {
+        return courses;
+    }
+
+    public void setCourses(Set<Course> courses) {
+        this.courses = courses;
+    }
 
     @Transient
-    public String name_with_address;
+    public String getName_with_address() {
+        return String.format("%s, %s", name, address);
+    }
+
 }

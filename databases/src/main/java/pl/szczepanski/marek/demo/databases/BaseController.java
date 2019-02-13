@@ -1,44 +1,38 @@
 package pl.szczepanski.marek.demo.databases;
 
+import com.fasterxml.jackson.annotation.JsonView;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
+import pl.szczepanski.marek.demo.databases.entities.Course;
 
-import java.sql.SQLException;
+import javax.persistence.EntityManager;
+import java.util.List;
 
 @RestController
 public class BaseController {
 
-    private JDBCService jdbcService;
 
-    public BaseController(JDBCService jdbcService) {
-        this.jdbcService = jdbcService; }
+    @Autowired
+    private EntityManager em;
 
-    @GetMapping("example1")
-    public String example1() throws SQLException {
-        return jdbcService.example1();
+    @GetMapping("students")
+    public List getStudents() {
+        List students = em.createQuery("select s from Student s").getResultList();
+        return students;
     }
-    @GetMapping("example2")
-    public String example2() throws SQLException {
-        return jdbcService.example2();
+
+    @GetMapping("courses")
+    @JsonView
+    public List getCourses() {
+        List courses = em.createQuery("from Course").getResultList();
+        return courses;
     }
-    @GetMapping("example3")
-    public String example3() throws SQLException {
-        return jdbcService.example3();
-    }
-    @GetMapping("example4")
-    public String example4() throws SQLException {
-        return jdbcService.example4();
-    }
-    @GetMapping("example5")
-    public String example5() throws SQLException {
-        return jdbcService.example5();
-    }
-    @GetMapping("example6")
-    public String example6() throws SQLException {
-        return jdbcService.example6();
-    }
-    @GetMapping("example7")
-    public String example7() throws SQLException {
-        return jdbcService.example7();
+
+    @GetMapping("course/{id}")
+    public Course getCourse(@PathVariable Integer id) {
+        Course course = em.find(Course.class, id);
+        return course;
     }
 }
