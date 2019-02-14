@@ -1,20 +1,19 @@
 package pl.szczepanski.marek.demo.databases;
 
-import com.fasterxml.jackson.annotation.JsonView;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import pl.szczepanski.marek.demo.databases.entities.Course;
 
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.List;
 
 @RestController
 public class BaseController {
 
 
-    @Autowired
+    @PersistenceContext
     private EntityManager em;
 
     @GetMapping("students")
@@ -24,7 +23,6 @@ public class BaseController {
     }
 
     @GetMapping("courses")
-    @JsonView
     public List getCourses() {
         List courses = em.createQuery("from Course").getResultList();
         return courses;
