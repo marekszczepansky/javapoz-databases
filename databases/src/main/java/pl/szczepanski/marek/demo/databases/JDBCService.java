@@ -77,7 +77,7 @@ public class JDBCService {
             }
             ResultSet myRs1 = myStmt
                     .executeQuery("select * from employees " +
-                            "where LOWER(departament) = 'legal'");
+                            "where LOWER(department) = 'legal'");
             return "OK";
         }
     }
