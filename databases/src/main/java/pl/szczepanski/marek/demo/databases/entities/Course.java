@@ -2,8 +2,8 @@ package pl.szczepanski.marek.demo.databases.entities;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class Course {
@@ -17,13 +17,13 @@ public class Course {
     private LocalDate startDate;
 
     @OneToMany(mappedBy = "course", fetch = FetchType.EAGER)
-    private List<Student> students = new ArrayList<>();
+    private Set<Student> students = new HashSet<>();
 
-    public List<Student> getStudents() {
+    public Set<Student> getStudents() {
         return students;
     }
 
-    public void setStudents(List<Student> students) {
+    public void setStudents(Set<Student> students) {
         this.students = students;
     }
 

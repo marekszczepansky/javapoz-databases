@@ -91,10 +91,15 @@ public class TestCode {
 
             Course courseLoaded = session.get(Course.class, course2Id);
 
-            System.out.println("Students from course set");
+            System.out.println("\nStudents from course set");
             for (Student element : courseLoaded.getStudents()) {
                 System.out.println("Student: " + element.getName());
             }
+
+            Student student3 = new Student();
+            session.persist(student3);
+            student3.setCourse(courseLoaded);
+            student3.setName("Anna Cameron");
 
             tx.commit();
 
