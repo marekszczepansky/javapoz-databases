@@ -35,7 +35,7 @@ public class JDBCService {
                 System.out.println(emploee);
             }
 
-            return "OK";
+            return "OK 123";
         } catch (Exception exc) {
             exc.printStackTrace();
         } finally {
@@ -59,6 +59,8 @@ public class JDBCService {
         String user = "sa";
         String pass = "";
 
+        System.out.println("\n\n==========");
+
             // 1. Get a connection to database
         try (
                 Connection myConn = DriverManager.getConnection(dbUrl, user, pass)
@@ -75,9 +77,17 @@ public class JDBCService {
                 System.out.println(myRs.getString("last_name")
                         + ", " + myRs.getString("first_name"));
             }
+
+            System.out.println("\n\n==========");
+
             ResultSet myRs1 = myStmt
                     .executeQuery("select * from employees " +
                             "where LOWER(department) = 'legal'");
+            while (myRs1.next()) {
+                System.out.println(myRs1.getString("last_name")
+                        + ", " + myRs1.getString("first_name"));
+            }
+
             return "OK";
         }
     }
@@ -100,9 +110,9 @@ public class JDBCService {
 
             int rowsAffected = myStmt.executeUpdate(
             "insert into employees " +
-                "(last_name, first_name, email, department, salary) " +
+                "(id ,last_name, first_name, email, department, salary) " +
                 "values " +
-                "('Wright', 'Eric', 'eric.wright@foo.com', 'HR', 33000.00)");
+                "(15, 'Wright', 'Eric', 'eric.wright@foo.com', 'HR', 33000.00)");
 
             System.out.println(rowsAffected + "rows affected.\n");
 
