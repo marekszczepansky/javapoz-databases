@@ -25,7 +25,7 @@ public class Course {
     @Transient
     private String comment;
 
-    @ManyToMany(mappedBy = "courses", fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy = "courses", fetch = FetchType.LAZY)
     private Set<Student> students = new HashSet<>();
 
     public Set<Student> getStudents() {

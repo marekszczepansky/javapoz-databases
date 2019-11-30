@@ -1,8 +1,11 @@
 package pl.szczepanski.marek.demo.databases;
 
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.CriteriaSpecification;
+import org.hibernate.criterion.Restrictions;
 import org.hibernate.query.Query;
 import org.springframework.stereotype.Component;
 import pl.szczepanski.marek.demo.databases.entities.Course;
@@ -81,6 +84,16 @@ public class TestCode {
             loadedCourse2.getStudents().forEach(student -> {
                 System.out.println(student.getName());
             });
+
+
+            final Criteria criteria = session.createCriteria(Course.class);
+            criteria.add(Restrictions.eq("name", "code 1"));
+            criteria.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
+
+            final List<Course> list = criteria.list();
+            if (list.size() > 0) {
+                System.out.println(list.get(0).getName());
+            }
 
 
             tx.commit();
