@@ -5,8 +5,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToMany;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class Student {
@@ -21,15 +22,15 @@ public class Student {
     @Column(name = "address_email", length = 128)
     private String address;
 
-    @ManyToOne
-    private Course course;
+    @ManyToMany
+    private Set<Course> courses = new HashSet<>();
 
-    public Course getCourse() {
-        return course;
+    public Set<Course> getCourses() {
+        return courses;
     }
 
-    public void setCourse(Course course) {
-        this.course = course;
+    public void setCourses(Set<Course> course) {
+        this.courses = course;
     }
 
     public int getId() {
